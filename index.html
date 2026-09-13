@@ -27,7 +27,7 @@
     .btn { background: #bdc3c7; color: white; border: none; padding: 12px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; flex: 1; cursor: pointer; }
     .btn-blue { background: var(--accent); }
     .screen { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
-    input { width: 85%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 10px; font-size: 1rem; outline: none; }
+    input { width: 85%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 10px; font-size: 1rem; outline: none; -webkit-user-select: text; user-select: text; }
     .ranking-area { background: white; margin: 15px; padding: 15px; border-radius: 15px; font-size: 0.8rem; }
     table { width: 100%; border-collapse: collapse; }
     th { color: #888; border-bottom: 1px solid #eee; padding: 8px; }
@@ -47,23 +47,24 @@
   <h2 style="color: var(--primary); margin-bottom:20px;">財務２級ラボ</h2>
   <div id="login-form">
     <input type="text" id="login-nick" placeholder="ニックネーム">
-    <input type="password" id="login-pw" placeholder="パスワード">
-    <button class="btn btn-blue" style="width: 92%; margin-top:10px" onclick="login()">ログイン</button>
+    <!-- パスワードを見える化 -->
+    <input type="text" id="login-pw" placeholder="パスワード">
+    <button id="login-btn-action" class="btn btn-blue" style="width: 92%; margin-top:10px" onclick="login()">ログイン</button>
     <p style="font-size:0.8rem; color:var(--accent); margin-top:25px" onclick="showReg()">新規アカウント作成</p>
     <p style="font-size:0.75rem; color:#888" onclick="showReset()">パスワードを忘れた場合</p>
   </div>
   <div id="reg-form" class="hidden">
     <input type="text" id="reg-nick" placeholder="希望ニックネーム">
-    <input type="password" id="reg-pw" placeholder="パスワード">
+    <input type="text" id="reg-pw" placeholder="パスワード">
     <input type="text" id="reg-secret" placeholder="秘密の合言葉(復旧用)">
     <p style="font-size:0.65rem; color:#888; text-align:left; width:85%; margin:0 auto 10px;">※英数字・ひらがな・カタカナ・漢字のみ使用可能です。</p>
-    <button class="btn btn-blue" style="width: 92%; margin-top:10px" onclick="register()">登録する</button>
+    <button id="reg-btn-action" class="btn btn-blue" style="width: 92%; margin-top:10px" onclick="register()">登録する</button>
     <p style="font-size:0.8rem; color:#888; margin-top:20px" onclick="showLogin()">戻る</p>
   </div>
   <div id="reset-form" class="hidden">
     <input type="text" id="reset-nick" placeholder="ニックネーム">
     <input type="text" id="reset-secret" placeholder="秘密の合言葉">
-    <input type="password" id="reset-newpw" placeholder="新しいパスワード">
+    <input type="text" id="reset-newpw" placeholder="新しいパスワード">
     <button class="btn btn-blue" style="width: 92%; margin-top:10px" onclick="resetPw()">再設定</button>
     <p style="font-size:0.8rem; color:#888; margin-top:20px" onclick="showLogin()">戻る</p>
   </div>
@@ -78,57 +79,18 @@
       <div class="user-badge" id="user-display" onclick="promptNick()"></div>
     </div>
   </div>
-
   <div class="main-content">
-    <div class="info-box">
-      <small style="color:var(--accent); font-weight:bold">今日のあなたへの言葉</small>
-      <div id="quote-display" style="font-weight:bold; margin-top:5px; font-size:0.85rem">...</div>
-    </div>
-
+    <div class="info-box"><small style="color:var(--accent); font-weight:bold">今日のあなたへの言葉</small><div id="quote-display" style="font-weight:bold; margin-top:5px; font-size:0.85rem">...</div></div>
     <a id="yt-link" href="#" target="_blank" class="yt-btn hidden">📺 YouTube解説を見る</a>
-
-    <div style="margin: 0 15px;">
-      <select id="cat-select" onchange="changeCat()" style="width:100%; padding:12px; border-radius:10px; border:2px solid var(--accent); font-weight:bold; background:white; outline:none;">
-        <option value="all">すべて表示</option>
-        <option value="review">復習対象 ⭐</option>
-      </select>
-    </div>
-
-    <div class="scene">
-      <div class="card" id="card" onclick="handleTap()">
-        <div class="card-face card-front">
-          <div class="card-num" id="num-f">No.</div>
-          <div class="star" id="star-f" onclick="toggleStar(event)">★</div>
-          <div id="text-f" style="margin-top:10px"></div>
-        </div>
-        <div class="card-face card-back">
-          <div class="card-num" id="num-b">No.</div>
-          <div class="star" id="star-b" onclick="toggleStar(event)">★</div>
-          <div id="text-b" style="margin-top:10px"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="controls">
-      <button class="btn" onclick="handleBack()">← 戻る</button>
-      <button class="btn" onclick="resetToFirst()">先頭へ</button>
-      <label style="font-size:0.8rem; font-weight:bold; display:flex; align-items:center;"><input type="checkbox" id="rand-mode" style="margin-right:5px"> ランダム</label>
-    </div>
-
-    <div class="ranking-area">
-      <h3 style="margin-top:0; font-size:0.9rem">🏆 解答数ランキング TOP20</h3>
-      <table id="rank-table"></table>
-      <button class="btn" style="margin-top:30px; width:100%" onclick="logout()">ログアウト</button>
-    </div>
+    <div style="margin: 0 15px;"><select id="cat-select" onchange="changeCat()" style="width:100%; padding:12px; border-radius:10px; border:2px solid var(--accent); font-weight:bold; background:white; outline:none;"><option value="all">すべて表示</option><option value="review">復習対象 ⭐</option></select></div>
+    <div class="scene"><div class="card" id="card" onclick="handleTap()"><div class="card-face card-front"><div class="card-num" id="num-f">No.</div><div class="star" id="star-f" onclick="toggleStar(event)">★</div><div id="text-f" style="margin-top:10px"></div></div><div class="card-face card-back"><div class="card-num" id="num-b">No.</div><div class="star" id="star-b" onclick="toggleStar(event)">★</div><div id="text-b" style="margin-top:10px"></div></div></div></div>
+    <div class="controls"><button class="btn" onclick="handleBack()">← 戻る</button><button class="btn" onclick="resetToFirst()">先頭へ</button><label style="font-size:0.8rem; font-weight:bold; display:flex; align-items:center;"><input type="checkbox" id="rand-mode" style="margin-right:5px"> ランダム</label></div>
+    <div class="ranking-area"><h3 style="margin-top:0; font-size:0.9rem">🏆 解答数ランキング TOP20</h3><table id="rank-table"></table><button class="btn" style="margin-top:30px; width:100%" onclick="logout()">ログアウト</button></div>
   </div>
 </div>
 
 <div id="modal-overlay" class="hidden">
-  <div class="modal">
-    <h3 id="modal-title"></h3>
-    <p id="modal-msg" style="margin-bottom:20px; font-size:0.9rem; line-height:1.5; color:#555"></p>
-    <button class="btn btn-blue" style="width:100%" onclick="closeModal()">OK</button>
-  </div>
+  <div class="modal"><h3 id="modal-title"></h3><p id="modal-msg" style="margin-bottom:20px; font-size:0.9rem; line-height:1.5; color:#555"></p><button class="btn btn-blue" style="width:100%" onclick="closeModal()">OK</button></div>
 </div>
 
 <script>
@@ -144,7 +106,7 @@
   window.onload = () => {
     const img = document.getElementById('splash-img');
     img.src = (window.innerHeight > window.innerWidth) ? 'splash-v.png' : 'splash-h.png';
-    setTimeout(hideSplash, 2500);
+    setTimeout(hideSplash, 2000);
   };
 
   function hideSplash() {
@@ -158,67 +120,102 @@
   }
 
   async function loadApp() {
-    const res = await fetch(API_URL + "?action=getAppData");
-    const data = await res.json();
-    state.all = data.problems;
-    state.quotes = data.quotes;
-    
-    const select = document.getElementById('cat-select');
-    while(select.options.length > 2) select.remove(2);
-    data.categories.forEach(c => {
-      const opt = document.createElement('option'); opt.value = c; opt.innerText = c;
-      select.appendChild(opt);
-    });
+    try {
+      const res = await fetch(API_URL + "?action=getAppData");
+      const data = await res.json();
+      state.all = data.problems;
+      state.quotes = data.quotes;
+      const select = document.getElementById('cat-select');
+      while(select.options.length > 2) select.remove(2);
+      data.categories.forEach(c => {
+        const opt = document.createElement('option'); opt.value = c; opt.innerText = c;
+        select.appendChild(opt);
+      });
+      if (data.youtubeUrl) {
+        const yt = document.getElementById('yt-link'); yt.href = data.youtubeUrl; yt.classList.remove('hidden');
+      }
+      const pw = localStorage.getItem('zaimu_pw');
+      const uRes = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'login', nickname: state.nickname, pw: pw }) });
+      const uJson = await uRes.json();
+      const u = uJson.result ? JSON.parse(uJson.result) : uJson; // Code.gsの返し方に合わせる
 
-    if (data.youtubeUrl) {
-      const yt = document.getElementById('yt-link'); yt.href = data.youtubeUrl; yt.classList.remove('hidden');
+      if (u === 'fail' || !u.nickname) { logout(); return; }
+      state.currentIndex = Number(u.lastIndex) || 0;
+      state.bookmarks = u.bookmarks ? u.bookmarks.toString().split(',').map(Number).filter(n=>n) : [];
+      document.getElementById('streak-cur').innerText = u.streak;
+      document.getElementById('streak-max').innerText = u.maxStreak;
+      document.getElementById('user-display').innerText = state.nickname;
+      renderRank(data.ranking);
+      updateCountdown();
+      showQuote();
+      changeCat();
+      document.getElementById('auth-screen').classList.add('hidden');
+      document.getElementById('app-screen').classList.remove('hidden');
+    } catch(e) {
+      openModal("エラー", "データの取得に失敗しました。URLを確認してください。");
     }
-
-    const pw = localStorage.getItem('zaimu_pw');
-    const uRes = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'login', nickname: state.nickname, pw: pw }) });
-    const u = await uRes.json();
-    if (u === 'fail') { logout(); return; }
-
-    state.currentIndex = Number(u.lastIndex) || 0;
-    state.bookmarks = u.bookmarks ? u.bookmarks.toString().split(',').map(Number).filter(n=>n) : [];
-    document.getElementById('streak-cur').innerText = u.streak;
-    document.getElementById('streak-max').innerText = u.maxStreak;
-    document.getElementById('user-display').innerText = state.nickname;
-
-    renderRank(data.ranking);
-    updateCountdown();
-    showQuote();
-    changeCat();
-    document.getElementById('auth-screen').classList.add('hidden');
-    document.getElementById('app-screen').classList.remove('hidden');
   }
 
   async function login() {
     const nick = document.getElementById('login-nick').value.trim();
-    const pw = document.getElementById('login-pw').value;
-    if(!nick || !pw) return openModal("エラー", "入力を完了してください");
-    const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'login', nickname: nick, pw }) });
-    const u = await res.json();
-    if (u === 'fail') return openModal("失敗", "ニックネームまたはPWが違います");
-    localStorage.setItem('zaimu_nick', nick); localStorage.setItem('zaimu_pw', pw);
-    state.nickname = nick; loadApp();
+    const pw = document.getElementById('login-pw').value.trim();
+    if(!nick || !pw) return openModal("エラー", "ニックネームとPWを入力してください");
+    const btn = document.getElementById('login-btn-action');
+    btn.innerText = "通信中..."; btn.disabled = true;
+
+    try {
+      const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'login', nickname: nick, pw: pw }) });
+      const json = await res.json();
+      const u = json.result ? (json.result === 'fail' ? 'fail' : JSON.parse(json.result)) : json;
+
+      if (u === 'fail') {
+        openModal("失敗", "ニックネームまたはPWが違います");
+        btn.innerText = "ログイン"; btn.disabled = false;
+      } else {
+        localStorage.setItem('zaimu_nick', nick);
+        localStorage.setItem('zaimu_pw', pw);
+        state.nickname = nick;
+        loadApp();
+      }
+    } catch(e) {
+      openModal("エラー", "サーバーと通信できませんでした");
+      btn.innerText = "ログイン"; btn.disabled = false;
+    }
   }
 
   async function register() {
-    const nick = document.getElementById('reg-nick').value.trim(), pw = document.getElementById('reg-pw').value, sec = document.getElementById('reg-secret').value;
+    const nick = document.getElementById('reg-nick').value.trim();
+    const pw = document.getElementById('reg-pw').value.trim();
+    const sec = document.getElementById('reg-secret').value.trim();
     if (!nick || !pw || !sec) return openModal("エラー", "全項目入力が必要です");
-    if (!isValidNickname(nick)) return openModal("不可", "ニックネームに使用できない文字があります");
-    const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'register', nickname: nick, pw, secret: sec }) });
-    const text = await res.text();
-    if (text === 'exists') return openModal("不可", "この名前は既に使用されています");
-    openModal("完了", "登録しました。ログインしてください"); showLogin();
+    if (!isValidNickname(nick)) return openModal("不可", "ニックネームに使用できない文字（記号やスペース）があります");
+    
+    const btn = document.getElementById('reg-btn-action');
+    btn.innerText = "通信中..."; btn.disabled = true;
+
+    try {
+      const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'register', nickname: nick, pw, secret: sec }) });
+      const json = await res.json();
+      const result = json.result;
+
+      if (result === 'exists') {
+        openModal("不可", "この名前は既に使用されています");
+        btn.innerText = "登録する"; btn.disabled = false;
+      } else if (result === 'success') {
+        openModal("完了", "登録しました。ログインしてください");
+        showLogin();
+      }
+    } catch(e) {
+      openModal("エラー", "登録に失敗しました。");
+      btn.innerText = "登録する"; btn.disabled = false;
+    }
   }
 
   async function resetPw() {
-    const nick = document.getElementById('reset-nick').value.trim(), sec = document.getElementById('reset-secret').value, npw = document.getElementById('reset-newpw').value;
+    const nick = document.getElementById('reset-nick').value.trim(), sec = document.getElementById('reset-secret').value.trim(), npw = document.getElementById('reset-newpw').value.trim();
     const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'resetPw', nickname: nick, secret: sec, newPw: npw }) });
-    const text = await res.text();
-    if (text === 'success') { openModal("成功", "PWを更新しました"); showLogin(); }
+    const json = await res.json();
+    if (json.result === 'success') { openModal("成功", "PWを更新しました"); showLogin(); }
     else openModal("失敗", "情報が一致しません");
   }
 
@@ -266,7 +263,7 @@
     updateCard(); document.getElementById('card').style.transform = `rotateY(${state.rotation}deg)`;
   }
 
-  async function sync(delta) {
+  function sync(delta) {
     fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'update', oldNickname: localStorage.getItem('zaimu_nick'), nickname: state.nickname, countDelta: delta, lastIndex: state.currentIndex, bookmarks: state.bookmarks.join(',') }) });
   }
 
@@ -298,9 +295,9 @@
   function resetToFirst() { state.currentIndex = 0; state.isAns = false; state.rotation = 0; document.getElementById('card').style.transform = `rotateY(0deg)`; updateCard(); sync(0); }
   
   async function promptNick() {
-    const n = prompt("新しいニックネーム(英数・日のみ)", state.nickname);
+    const n = prompt("新しいニックネームを入力してください", state.nickname);
     if(n && n !== state.nickname) {
-      if(!isValidNickname(n)) return alert("使用できない文字があります");
+      if(!isValidNickname(n)) return alert("記号などは使用できません");
       const old = state.nickname; state.nickname = n; document.getElementById('user-badge').innerText = n;
       fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'update', oldNickname: old, nickname: n, countDelta: 0, lastIndex: state.currentIndex, bookmarks: state.bookmarks.join(',') }) });
       localStorage.setItem('zaimu_nick', n); alert("変更しました");
