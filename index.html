@@ -8,10 +8,8 @@
     :root { --primary: #001a3d; --accent: #3498db; --bg: #f2f5f8; --star: #f1c40f; --yt: #ff0000; }
     html, body { height: 100%; margin: 0; padding: 0; background: var(--bg); font-family: -apple-system, sans-serif; color: #333; }
     body { display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto; -webkit-user-select: none; user-select: none; }
-    
-    /* スプラッシュ画面修正：iPhoneで画像が切れないように */
     #splash-screen { position: fixed; inset: 0; background: #001a3d; z-index: 9999; display: flex; align-items: center; justify-content: center; transition: opacity 0.4s; cursor: pointer; }
-    #splash-img { width: 100%; height: 100%; object-fit: cover; } /* coverで画面一杯に */
+    #splash-img { width: 100%; height: 100%; object-fit: cover; }
     @media (min-width: 768px) { #splash-img { object-fit: contain; } }
 
     .header { background: var(--primary); color: white; padding: calc(env(safe-area-inset-top) + 10px) 15px 12px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
@@ -21,14 +19,11 @@
 
     .main-content { flex: 1; padding-bottom: 30px; }
     .info-box { background: white; margin: 10px 15px; padding: 12px; border-radius: 12px; border-left: 4px solid var(--accent); box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
-    
     .guide-text { font-size: 0.7rem; color: #666; margin: 5px 18px; font-weight: bold; }
     .guide-text b { color: var(--star); }
 
     .yt-btn { background: var(--yt); color: white; margin: 20px 15px; padding: 15px; border-radius: 12px; text-decoration: none; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.95rem; gap: 8px; box-shadow: 0 4px 0 #b30000; }
-    .yt-btn:active { transform: translateY(2px); box-shadow: none; }
-
-    .scene { width: 100%; height: 320px; display: flex; align-items: center; justify-content: center; perspective: 1000px; margin: 5px 0; }
+    .scene { width: 100%; height: 320px; display: flex; align-items: center; justify-content: center; perspective: 1000px; margin: 10px 0; }
     .card { width: 88%; height: 95%; position: relative; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); transform-style: preserve-3d; }
     .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: flex-start; padding: 45px 20px; box-sizing: border-box; border-radius: 20px; font-weight: 600; font-size: 1.15rem; box-shadow: 0 8px 20px rgba(0,0,0,0.1); line-height: 1.6; overflow-y: auto; text-align: left; }
     .card-front { background: white; color: var(--primary); }
@@ -40,10 +35,10 @@
     .controls { display: flex; justify-content: space-between; gap: 10px; padding: 10px 15px; }
     .btn { background: #bdc3c7; color: white; border: none; padding: 12px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; flex: 1; cursor: pointer; }
     .btn-blue { background: var(--accent); }
-    .btn-dark { background: #7f8c8d; } /* 先頭へボタン：色を濃く */
+    .btn-dark { background: #7f8c8d; }
 
-    .screen { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
-    input { width: 85%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 10px; font-size: 1rem; outline: none; }
+    .screen { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; overflow-y: auto; }
+    input { width: 85%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 10px; font-size: 1rem; outline: none; -webkit-user-select: text; user-select: text; background: white; }
     
     .ranking-area { background: white; margin: 15px; padding: 15px; border-radius: 15px; font-size: 0.8rem; }
     table { width: 100%; border-collapse: collapse; }
@@ -63,6 +58,7 @@
 
 <div id="auth-screen" class="screen hidden">
   <h2 style="color: var(--primary); margin-bottom:20px;">財務２級ラボ</h2>
+  
   <div id="login-form">
     <input type="text" id="login-nick" placeholder="ニックネーム">
     <input type="text" id="login-pw" placeholder="パスワード">
@@ -70,19 +66,23 @@
     <p style="font-size:0.8rem; color:var(--accent); margin-top:25px" onclick="showReg()">新規アカウント作成</p>
     <p style="font-size:0.75rem; color:#888" onclick="showReset()">パスワードを忘れた場合</p>
   </div>
+
   <div id="reg-form" class="hidden">
     <input type="text" id="reg-nick" placeholder="希望ニックネーム">
-    <input type="text" id="reg-pw" placeholder="パスワード">
+    <input type="text" id="reg-pw" placeholder="パスワード(半角英数)">
+    <input type="text" id="reg-pw-confirm" placeholder="パスワード(確認用)">
     <input type="text" id="reg-secret" placeholder="秘密の合言葉(復旧用)">
-    <p style="font-size:0.65rem; color:#888; text-align:left; width:85%; margin:0 auto 10px;">※英数字・ひらがな・カタカナ・漢字のみ使用可能です。</p>
+    <p style="font-size:0.65rem; color:#888; text-align:left; width:85%; margin:0 auto 10px;">※英数字・ひらがな・カタカナ・漢字のみ使用可能です。<br>※パスワードは半角英数字のみ使用可能です。</p>
     <button id="reg-btn-action" class="btn btn-blue" style="width: 92%; margin-top:10px" onclick="register()">登録する</button>
-    <p style="font-size:0.8rem; color:#888; margin-top:20px" onclick="showLogin()">戻る</p>
+    <p style="font-size:0.8rem; color:#888; margin-top:20px" onclick="showLogin()">ログインに戻る</p>
   </div>
+
   <div id="reset-form" class="hidden">
     <input type="text" id="reset-nick" placeholder="ニックネーム">
     <input type="text" id="reset-secret" placeholder="秘密の合言葉">
-    <input type="text" id="reset-newpw" placeholder="新しいパスワード">
-    <button class="btn btn-blue" style="width: 92%; margin-top:10px" onclick="resetPw()">再設定</button>
+    <input type="text" id="reset-newpw" placeholder="新しいパスワード(半角英数)">
+    <input type="text" id="reset-newpw-confirm" placeholder="パスワード(確認用)">
+    <button id="reset-btn-action" class="btn btn-blue" style="width: 92%; margin-top:10px" onclick="resetPw()">再設定</button>
     <p style="font-size:0.8rem; color:#888; margin-top:20px" onclick="showLogin()">戻る</p>
   </div>
 </div>
@@ -153,7 +153,8 @@
 </div>
 
 <script>
-  const API_URL = "あなたのGASウェブアプリURL";
+  // 【重要】API_URLを自分のものに書き換えてください
+  const API_URL = "https://script.google.com/macros/s/AKfycbzok2guVTJERc8hpOSDKybor7IPGwVYutn3THuNLEXKuMmT2cfAO_o86sYvQZj0HLmlxQ/exec";
 
   let state = { nickname: '', all: [], filtered: [], quotes: [], bookmarks: [], currentIndex: 0, rotation: 0, isAns: false };
 
@@ -161,14 +162,14 @@
     return /^[a-zA-Z0-9\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]+$/.test(str);
   }
 
+  function isValidPassword(str) {
+    return /^[a-zA-Z0-9]+$/.test(str);
+  }
+
   window.onload = () => {
     const img = document.getElementById('splash-img');
     img.src = (window.innerHeight > window.innerWidth) ? 'splash-v.png' : 'splash-h.png';
-    
-    // 起動時に裏側でアプリデータを読み込み開始
     loadAppDataBackground();
-
-    // 1.5秒後にスプラッシュを消す（データ読込が早ければすぐ遷移）
     setTimeout(hideSplash, 1500);
   };
 
@@ -188,54 +189,55 @@
   }
 
   async function loadMain() {
-    const data = await appDataPromise;
-    state.all = data.problems;
-    state.quotes = data.quotes;
-    
-    const select = document.getElementById('cat-select');
-    while(select.options.length > 2) select.remove(2);
-    data.categories.forEach(c => {
-      const opt = document.createElement('option'); opt.value = c; opt.innerText = c;
-      select.appendChild(opt);
-    });
+    try {
+      const data = await appDataPromise;
+      state.all = data.problems;
+      state.quotes = data.quotes;
+      
+      const select = document.getElementById('cat-select');
+      while(select.options.length > 2) select.remove(2);
+      data.categories.forEach(c => {
+        const opt = document.createElement('option'); opt.value = c; opt.innerText = c;
+        select.appendChild(opt);
+      });
 
-    if (data.youtubeUrl) {
-      const yt = document.getElementById('yt-link'); yt.href = data.youtubeUrl; yt.classList.remove('hidden');
-    }
+      if (data.youtubeUrl) {
+        const yt = document.getElementById('yt-link'); yt.href = data.youtubeUrl; yt.classList.remove('hidden');
+      }
 
-    const pw = localStorage.getItem('zaimu_pw');
-    const uRes = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'login', nickname: state.nickname, pw: pw }) });
-    const u = await uRes.json();
-    
-    if (u === 'fail' || u.result === 'fail') { logout(); return; }
+      const pw = localStorage.getItem('zaimu_pw');
+      const uRes = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'login', nickname: state.nickname, pw: pw }) });
+      const u = await uRes.json();
+      
+      if (u.result === 'fail') { logout(); return; }
 
-    const user = u.result ? JSON.parse(u.result) : u;
-    state.currentIndex = Number(user.lastIndex) || 0;
-    state.bookmarks = user.bookmarks ? user.bookmarks.toString().split(',').map(Number).filter(n=>n) : [];
-    
-    document.getElementById('streak-display').innerText = `継続 ${user.streak}日 (最高継続日数 ${user.maxStreak}日)`;
-    document.getElementById('user-display').innerText = state.nickname;
+      const user = JSON.parse(u.result);
+      state.currentIndex = Number(user.lastIndex) || 0;
+      state.bookmarks = user.bookmarks ? user.bookmarks.toString().split(',').map(Number).filter(n=>n) : [];
+      
+      document.getElementById('streak-display').innerText = `継続 ${user.streak}日 (最高継続日数 ${user.maxStreak}日)`;
+      document.getElementById('user-display').innerText = state.nickname;
 
-    renderRank(data.ranking);
-    updateCountdown();
-    showQuote();
-    changeCat();
-    document.getElementById('auth-screen').classList.add('hidden');
-    document.getElementById('app-screen').classList.remove('hidden');
+      renderRank(data.ranking);
+      updateCountdown();
+      showQuote();
+      changeCat();
+      document.getElementById('auth-screen').classList.add('hidden');
+      document.getElementById('app-screen').classList.remove('hidden');
+    } catch(e) { openModal("通信エラー", "データの取得に失敗しました。URLを確認してください。"); }
   }
 
   async function login() {
     const nick = document.getElementById('login-nick').value.trim();
-    const pw = document.getElementById('login-pw').value;
+    const pw = document.getElementById('login-pw').value.trim();
+    if(!nick || !pw) return openModal("エラー", "ニックネームとPWを入力してください");
     const btn = document.getElementById('login-btn-action');
     btn.innerText = "通信中..."; btn.disabled = true;
 
     try {
-      const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'login', nickname: nick, pw }) });
+      const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'login', nickname: nick, pw: pw }) });
       const json = await res.json();
-      const u = json.result && json.result !== 'fail' ? JSON.parse(json.result) : json;
-
-      if (u === 'fail') {
+      if (json.result === 'fail') {
         openModal("失敗", "ニックネームまたはPWが違います");
         btn.innerText = "ログイン"; btn.disabled = false;
       } else {
@@ -244,25 +246,66 @@
         state.nickname = nick;
         loadMain();
       }
-    } catch(e) { btn.innerText = "ログイン"; btn.disabled = false; }
+    } catch(e) { openModal("エラー", "通信に失敗しました"); btn.innerText = "ログイン"; btn.disabled = false; }
   }
 
   async function register() {
-    const nick = document.getElementById('reg-nick').value.trim(), pw = document.getElementById('reg-pw').value, sec = document.getElementById('reg-secret').value;
+    const nick = document.getElementById('reg-nick').value.trim();
+    const pw = document.getElementById('reg-pw').value.trim();
+    const pwConf = document.getElementById('reg-pw-confirm').value.trim();
+    const sec = document.getElementById('reg-secret').value.trim();
+
     if (!nick || !pw || !sec) return openModal("エラー", "全項目入力が必要です");
-    if (!isValidNickname(nick)) return openModal("不可", "使用できない文字があります");
+    if (!isValidNickname(nick)) return openModal("不可", "ニックネームに使用できない文字があります");
+    if (pw !== pwConf) return openModal("エラー", "パスワードが一致しません");
+    if (!isValidPassword(pw)) return openModal("エラー", "パスワードは半角英数字のみ使用可能です");
     
-    const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'register', nickname: nick, pw, secret: sec }) });
-    const json = await res.json();
-    if (json.result === 'exists') return openModal("不可", "既に使用されています");
-    openModal("完了", "登録しました。ログインしてください"); showLogin();
+    const btn = document.getElementById('reg-btn-action');
+    btn.innerText = "登録中..."; btn.disabled = true;
+
+    try {
+      const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'register', nickname: nick, pw, secret: sec }) });
+      const json = await res.json();
+      if (json.result === 'exists') {
+        openModal("不可", "既に使用されています");
+        btn.innerText = "登録する"; btn.disabled = false;
+      } else {
+        openModal("完了", "登録しました。ログインしてください");
+        showLogin();
+      }
+    } catch(e) { openModal("エラー", "登録に失敗しました"); btn.innerText = "登録する"; btn.disabled = false; }
+  }
+
+  async function resetPw() {
+    const nick = document.getElementById('reset-nick').value.trim();
+    const sec = document.getElementById('reset-secret').value.trim();
+    const npw = document.getElementById('reset-newpw').value.trim();
+    const npwConf = document.getElementById('reset-newpw-confirm').value.trim();
+
+    if (!nick || !sec || !npw) return openModal("エラー", "未入力項目があります");
+    if (npw !== npwConf) return openModal("エラー", "パスワードが一致しません");
+    if (!isValidPassword(npw)) return openModal("エラー", "パスワードは半角英数字のみ使用可能です");
+
+    const btn = document.getElementById('reset-btn-action');
+    btn.innerText = "処理中..."; btn.disabled = true;
+
+    try {
+      const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'resetPw', nickname: nick, secret: sec, newPw: npw }) });
+      const json = await res.json();
+      if (json.result === 'success') {
+        openModal("成功", "PWを更新しました"); showLogin();
+      } else {
+        openModal("失敗", "情報が一致しません");
+        btn.innerText = "再設定"; btn.disabled = false;
+      }
+    } catch(e) { openModal("エラー", "通信に失敗しました"); btn.innerText = "再設定"; btn.disabled = false; }
   }
 
   function handleTap() {
     if (state.filtered.length === 0) return;
     if (!state.isAns) {
       state.isAns = true; state.rotation += 180; updateCard();
-      sync(1); // めくるたびにカウントアップ
+      sync(1);
     } else {
       state.isAns = false; state.rotation += 180;
       if (document.getElementById('rand-mode').checked) state.currentIndex = Math.floor(Math.random() * state.filtered.length);
@@ -273,7 +316,6 @@
   }
 
   function sync(delta) {
-    // 回数増分(delta)を送信
     fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'update', oldNickname: state.nickname, nickname: state.nickname, countDelta: delta, lastIndex: state.currentIndex, bookmarks: state.bookmarks.join(',') }) });
   }
 
@@ -299,16 +341,7 @@
     document.getElementById(isFront ? 'text-f' : 'text-b').innerText = isFront ? p.q : p.a;
     const isB = state.bookmarks.includes(p.id);
     document.getElementById('star-f').classList.toggle('active', isB); document.getElementById('star-b').classList.toggle('active', isB);
-  }
-
-  function updateCountdown() {
-    const diff = Math.ceil((new Date('2026/12/06') - new Date().setHours(0,0,0,0)) / 86400000);
-    document.getElementById('countdown').innerText = diff > 0 ? `試験まで ${diff}日` : "試験当日";
-  }
-
-  function renderRank(data) {
-    document.getElementById('rank-table').innerHTML = '<tr><th>位</th><th>名前</th><th>回数</th><th>継続</th></tr>' + 
-      data.map((r, i) => `<tr ${r.name === state.nickname ? 'style="background:#fff9c4;font-weight:bold;"':''}><td>${i+1}</td><td>${r.name}</td><td>${r.count}</td><td>${r.streak}日</td></tr>`).join('');
+    localStorage.setItem('zaimu_lastIndex', state.currentIndex);
   }
 
   function toggleStar(e) {
@@ -327,19 +360,20 @@
   }
 
   function resetToFirst() { state.currentIndex = 0; state.isAns = false; state.rotation = 0; document.getElementById('card').style.transform = `rotateY(0deg)`; updateCard(); sync(0); }
-  function showQuote() { document.getElementById('quote-display').innerText = state.quotes[Math.floor(Math.random() * state.quotes.length)]; }
+  function showQuote() { if(state.quotes.length > 0) document.getElementById('quote-display').innerText = state.quotes[Math.floor(Math.random() * state.quotes.length)]; }
   function showReg() { document.getElementById('login-form').classList.add('hidden'); document.getElementById('reg-form').classList.remove('hidden'); }
   function showLogin() { document.getElementById('reg-form').classList.add('hidden'); document.getElementById('reset-form').classList.add('hidden'); document.getElementById('login-form').classList.remove('hidden'); }
   function showReset() { document.getElementById('login-form').classList.add('hidden'); document.getElementById('reset-form').classList.remove('hidden'); }
   function logout() { localStorage.clear(); location.reload(); }
   function openModal(t, m) { document.getElementById('modal-title').innerText = t; document.getElementById('modal-msg').innerText = m; document.getElementById('modal-overlay').classList.remove('hidden'); }
   function closeModal() { document.getElementById('modal-overlay').classList.add('hidden'); }
+  function updateCountdown() { const diff = Math.ceil((new Date('2026/12/06') - new Date().setHours(0,0,0,0)) / 86400000); document.getElementById('countdown').innerText = diff > 0 ? `試験まで ${diff}日` : "試験当日"; }
 
   async function promptNick() {
     const n = prompt("新しいニックネーム(英数・日のみ)", state.nickname);
     if(n && n !== state.nickname) {
       if(!isValidNickname(n)) return alert("記号などは使用できません");
-      const old = state.nickname; state.nickname = n; document.getElementById('user-display').innerText = n;
+      const old = state.nickname; state.nickname = n; document.getElementById('user-badge').innerText = n;
       fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'update', oldNickname: old, nickname: n, countDelta: 0, lastIndex: state.currentIndex, bookmarks: state.bookmarks.join(',') }) });
       localStorage.setItem('zaimu_nick', n);
     }
