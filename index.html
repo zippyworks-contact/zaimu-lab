@@ -9,20 +9,19 @@
     html, body { height: 100%; margin: 0; padding: 0; background: var(--bg); font-family: -apple-system, sans-serif; color: #333; }
     body { display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto; -webkit-user-select: none; user-select: none; }
     
-    /* スプラッシュ画面修正：高速表示と中央配置 */
-    #splash-screen { position: fixed; inset: 0; background: #001a3d; z-index: 9999; display: flex; align-items: center; justify-content: center; transition: opacity 0.3s; cursor: pointer; }
-    #splash-img { width: 100%; height: 100%; object-fit: contain; background: #001a3d; }
+    /* スプラッシュ画像設定修正 */
+    #splash-screen { position: fixed; inset: 0; background: #001a3d; z-index: 9999; display: flex; align-items: center; justify-content: center; transition: opacity 0.4s; }
+    #splash-img { width: 100%; height: 100%; object-fit: contain; background: #001a3d; display: none; }
 
     .header { background: var(--primary); color: white; padding: calc(env(safe-area-inset-top) + 10px) 15px 12px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
     .header h1 { font-size: 0.85rem; margin: 5px 0; }
     .status-area { display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; margin-top: 5px; }
     .user-badge { background: var(--accent); padding: 2px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; }
 
-    .main-content { flex: 1; padding-bottom: 30px; }
+    .main-content { flex: 1; padding-bottom: 40px; }
     .info-box { background: white; margin: 10px 15px; padding: 12px; border-radius: 12px; border-left: 4px solid var(--accent); box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
     .guide-text { font-size: 0.7rem; color: #666; margin: 8px 18px 4px; font-weight: bold; }
-
-    .yt-btn { background: var(--yt); color: white; margin: 15px 15px; padding: 15px; border-radius: 12px; text-decoration: none; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.95rem; gap: 8px; box-shadow: 0 4px 0 #b30000; }
+    .guide-text b { color: var(--star); }
 
     .scene { width: 100%; height: 320px; display: flex; align-items: center; justify-content: center; perspective: 1000px; margin: 5px 0; }
     .card { width: 88%; height: 95%; position: relative; transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1); transform-style: preserve-3d; }
@@ -34,18 +33,19 @@
     .star.active { color: var(--star); }
 
     .controls { display: flex; justify-content: space-between; gap: 10px; padding: 10px 15px; }
-    .btn { background: #bdc3c7; color: white; border: none; padding: 12px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; flex: 1; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .btn { background: #bdc3c7; color: white; border: none; padding: 12px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; flex: 1; cursor: pointer; }
     .btn-blue { background: var(--accent); }
     .btn-dark { background: #555; }
 
-    .screen { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; overflow-y: auto; }
-    input { width: 85%; padding: 14px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 1rem; outline: none; background: white; }
-    
     .ranking-area { background: white; margin: 15px; padding: 15px; border-radius: 15px; font-size: 0.8rem; }
     table { width: 100%; border-collapse: collapse; }
     th { color: #888; border-bottom: 1px solid #eee; padding: 8px; }
     td { padding: 10px 5px; border-bottom: 1px solid #f9f9f9; text-align: center; }
 
+    .yt-btn { background: var(--yt); color: white; margin: 15px; padding: 15px; border-radius: 12px; text-decoration: none; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.95rem; gap: 8px; box-shadow: 0 4px 0 #b30000; }
+
+    .screen { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; overflow-y: auto; }
+    input { width: 85%; padding: 14px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 1rem; outline: none; background: white; }
     #modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 3000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
     .modal { background: white; width: 85%; max-width: 320px; border-radius: 20px; padding: 25px; text-align: center; }
     .hidden { display: none !important; }
@@ -53,8 +53,8 @@
 </head>
 <body>
 
-<div id="splash-screen" onclick="hideSplash()">
-  <img id="splash-img" src="" onerror="this.style.display='none'">
+<div id="splash-screen">
+  <img id="splash-img" src="" alt="">
 </div>
 
 <div id="auth-screen" class="screen hidden">
@@ -66,23 +66,20 @@
     <p style="font-size:0.8rem; color:var(--accent); margin-top:25px" onclick="showReg()">新規アカウント作成</p>
     <p style="font-size:0.75rem; color:#888" onclick="showReset()">パスワードを忘れた場合</p>
   </div>
-
   <div id="reg-form" class="hidden">
     <input type="text" id="reg-nick" placeholder="希望ニックネーム">
     <input type="text" id="reg-pw" placeholder="パスワード(半角英数)">
     <input type="text" id="reg-pw-confirm" placeholder="パスワード(確認用)">
     <input type="text" id="reg-secret" placeholder="秘密の合言葉(復旧用)">
-    <p style="font-size:0.6rem; color:#888; text-align:left; width:85%; margin:0 auto 10px;">※ニックネームはIDになります。英数字・ひらがな・カタカナ・漢字のみ。<br>※PWは半角英数字のみ。</p>
     <button id="reg-btn-action" class="btn btn-blue" style="max-width: 92%; margin-top:10px" onclick="register()">登録する</button>
-    <p style="font-size:0.8rem; color:#888; margin-top:20px" onclick="showLogin()">ログインに戻る</p>
+    <p style="font-size:0.8rem; color:#888; margin-top:20px" onclick="showLogin()">戻る</p>
   </div>
-
   <div id="reset-form" class="hidden">
     <input type="text" id="reset-nick" placeholder="登録ニックネーム">
     <input type="text" id="reset-secret" placeholder="秘密の合言葉">
-    <input type="text" id="reset-newpw" placeholder="新パスワード(半角英数)">
-    <input type="text" id="reset-newpw-confirm" placeholder="パスワード(確認用)">
-    <button id="reset-btn-action" class="btn btn-blue" style="max-width: 92%; margin-top:10px" onclick="resetPw()">再設定</button>
+    <input type="text" id="reset-newpw" placeholder="新パスワード">
+    <input type="text" id="reset-newpw-confirm" placeholder="パスワード確認">
+    <button class="btn btn-blue" style="width: 92%; margin-top:10px" onclick="resetPw()">再設定</button>
     <p style="font-size:0.8rem; color:#888; margin-top:20px" onclick="showLogin()">戻る</p>
   </div>
 </div>
@@ -92,25 +89,19 @@
     <h1>財務２級ラボ　単語カード</h1>
     <div class="status-area">
       <div id="countdown"></div>
-      <div id="streak-display">継続 1日 (最高 1日)</div>
+      <div id="streak-display">継続 1日 (最高継続日数 1日)</div>
       <div class="user-badge" id="user-display" onclick="promptNick()"></div>
     </div>
   </div>
 
   <div class="main-content">
     <div class="info-box"><small style="color:var(--accent); font-weight:bold">今日のあなたへの言葉</small><div id="quote-display" style="font-weight:bold; margin-top:5px; font-size:0.85rem">...</div></div>
-
     <div class="guide-text">▼ 問題の種類を選択できます</div>
     <div style="margin: 0 15px;"><select id="cat-select" onchange="changeCat()" style="width:100%; padding:12px; border-radius:10px; border:2px solid var(--accent); font-weight:bold; background:white; outline:none;"><option value="all">すべて表示</option><option value="review">復習対象 ⭐</option></select></div>
-
     <div class="guide-text">★マークをタップすると復習対象に登録できます。</div>
-
     <div class="scene"><div class="card" id="card" onclick="handleTap()"><div class="card-face card-front"><div class="card-num" id="num-f">No.</div><div class="star" id="star-f" onclick="toggleStar(event)">★</div><div id="text-f" style="margin-top:10px"></div></div><div class="card-face card-back"><div class="card-num" id="num-b">No.</div><div class="star" id="star-b" onclick="toggleStar(event)">★</div><div id="text-b" style="margin-top:10px"></div></div></div></div>
-
     <div class="controls"><button class="btn" onclick="handleBack()">← 戻る</button><button class="btn btn-dark" onclick="resetToFirst()">先頭へ</button><label style="font-size:0.8rem; font-weight:bold; display:flex; align-items:center;"><input type="checkbox" id="rand-mode" style="margin-right:5px"> ランダム</label></div>
-
     <div class="ranking-area"><h3 style="margin-top:0; font-size:0.85rem; color:var(--primary);">🏆 カードをめくったランキングTOP２０</h3><table id="rank-table"></table><button class="btn" style="margin-top:25px; width:100%; background:#eee; color:#666;" onclick="logout()">ログアウト</button></div>
-
     <a id="yt-link" href="#" target="_blank" class="yt-btn hidden">📺 YouTube解説を見る</a>
   </div>
 </div>
@@ -118,21 +109,18 @@
 <div id="modal-overlay" class="hidden"><div class="modal"><h3 id="modal-title"></h3><p id="modal-msg" style="margin-bottom:20px; font-size:0.85rem; line-height:1.5; color:#555"></p><button class="btn btn-blue" style="width:100%" onclick="closeModal()">OK</button></div></div>
 
 <script>
-  // 【重要】ここに最新のGASウェブアプリURLを貼り付け
-  const API_URL = "https://script.google.com/macros/s/AKfycbzok2guVTJERc8hpOSDKybor7IPGwVYutn3THuNLEXKuMmT2cfAO_o86sYvQZj0HLmlxQ/exec";
+  // 【重要】最新のGAS URL
+  const API_URL = "https://script.google.com/macros/s/AKfycbxhZqlJGuGtiM4FMGP15Oo319T-iFRJqmXiflU6rG2Q-z3o1_NMDIlA6FkvO3vxSixguw/exec";
 
   let state = { nickname: '', all: [], filtered: [], quotes: [], bookmarks: [], currentIndex: 0, rotation: 0, isAns: false };
 
-  function isValidNickname(str) { return /^[a-zA-Z0-9\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]+$/.test(str); }
-  function isValidPassword(str) { return /^[a-zA-Z0-9]+$/.test(str); }
-
   window.onload = () => {
     const img = document.getElementById('splash-img');
-    img.src = (window.innerHeight > window.innerWidth) ? 'splash-v.png' : 'splash-h.png';
-    // バックグラウンド読込開始
+    const splashPath = (window.innerHeight > window.innerWidth) ? 'splash-v.png' : 'splash-h.png';
+    img.src = splashPath;
+    img.onload = () => img.style.display = 'block'; // 読み込み完了後に表示
     loadAppDataBackground();
-    // 1秒後に遷移
-    setTimeout(hideSplash, 1000);
+    setTimeout(hideSplash, 1200); // 遷移を早める
   };
 
   let appDataPromise = null;
@@ -155,8 +143,7 @@
     try {
       const data = await appDataPromise;
       if (!data) throw new Error();
-      state.all = data.problems;
-      state.quotes = data.quotes;
+      state.all = data.problems; state.quotes = data.quotes;
       const select = document.getElementById('cat-select');
       while(select.options.length > 2) select.remove(2);
       data.categories.forEach(c => {
@@ -172,13 +159,14 @@
       const user = JSON.parse(uJson.result);
       state.currentIndex = Number(user.lastIndex) || 0;
       state.bookmarks = user.bookmarks ? user.bookmarks.toString().split(',').map(Number).filter(n=>n) : [];
-      document.getElementById('streak-display').innerText = `継続 ${user.streak}日 (最高 ${user.maxStreak}日)`;
+      // 表記修正
+      document.getElementById('streak-display').innerText = `継続 ${user.streak}日 (最高継続日数 ${user.maxStreak}日)`;
       document.getElementById('user-display').innerText = state.nickname;
       renderRank(data.ranking);
       updateCountdown(); showQuote(); changeCat();
       document.getElementById('auth-screen').classList.add('hidden');
       document.getElementById('app-screen').classList.remove('hidden');
-    } catch(e) { openModal("エラー", "接続に失敗しました。ネット環境を確認してください。"); }
+    } catch(e) { openModal("エラー", "接続に失敗しました。URLとネットを確認してください。"); }
   }
 
   async function login() {
@@ -199,43 +187,20 @@
         state.nickname = nick;
         loadMain();
       }
-    } catch(e) { openModal("エラー", "サーバーに接続できません"); btn.innerText = "ログイン"; btn.disabled = false; }
+    } catch(e) { openModal("エラー", "通信失敗"); btn.innerText = "ログイン"; btn.disabled = false; }
   }
 
   async function register() {
-    const nick = document.getElementById('reg-nick').value.trim();
-    const pw = document.getElementById('reg-pw').value.trim(), pwC = document.getElementById('reg-pw-confirm').value.trim(), sec = document.getElementById('reg-secret').value.trim();
+    const nick = document.getElementById('reg-nick').value.trim(), pw = document.getElementById('reg-pw').value.trim(), pwC = document.getElementById('reg-pw-confirm').value.trim(), sec = document.getElementById('reg-secret').value.trim();
     if (!nick || !pw || !sec) return openModal("エラー", "全項目入力してください");
-    if (!isValidNickname(nick)) return openModal("不可", "ニックネームに使用できない文字があります");
-    if (pw !== pwC) return openModal("不一致", "パスワードが確認用と一致しません");
-    if (!isValidPassword(pw)) return openModal("不可", "PWは半角英数字のみです");
-    const btn = document.getElementById('reg-btn-action');
-    btn.innerText = "登録中..."; btn.disabled = true;
+    if (pw !== pwC) return openModal("不一致", "パスワードが一致しません");
+    const btn = document.getElementById('reg-btn-action'); btn.innerText = "登録中..."; btn.disabled = true;
     try {
       const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'register', nickname: nick, pw: pw, secret: sec }) });
       const json = await res.json();
-      if (json.result === 'exists') {
-        openModal("不可", "この名前は既に使われています");
-        btn.innerText = "登録する"; btn.disabled = false;
-      } else {
-        openModal("完了", "登録しました。ログインしてください"); showLogin();
-      }
-    } catch(e) { openModal("エラー", "登録失敗"); btn.innerText = "登録する"; btn.disabled = false; }
-  }
-
-  async function resetPw() {
-    const nick = document.getElementById('reset-nick').value.trim(), sec = document.getElementById('reset-secret').value.trim();
-    const npw = document.getElementById('reset-newpw').value.trim(), npwC = document.getElementById('reset-newpw-confirm').value.trim();
-    if (npw !== npwC) return openModal("不一致", "パスワードが一致しません");
-    if (!isValidPassword(npw)) return openModal("不可", "半角英数字のみ可能です");
-    const btn = document.getElementById('reset-btn-action');
-    btn.innerText = "処理中..."; btn.disabled = true;
-    try {
-      const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'resetPw', nickname: nick, secret: sec, newPw: npw }) });
-      const json = await res.json();
-      if (json.result === 'success') { openModal("成功", "パスワードを再設定しました"); showLogin(); }
-      else { openModal("失敗", "情報が正しくありません"); btn.innerText = "再設定"; btn.disabled = false; }
-    } catch(e) { openModal("エラー", "通信失敗"); btn.innerText = "再設定"; btn.disabled = false; }
+      if (json.result === 'exists') { openModal("不可", "既に使われています"); btn.innerText = "登録する"; btn.disabled = false; }
+      else { openModal("完了", "登録しました"); showLogin(); }
+    } catch(e) { openModal("エラー", "通信失敗"); btn.innerText = "登録する"; btn.disabled = false; }
   }
 
   function handleTap() {
@@ -292,8 +257,7 @@
   async function promptNick() {
     const n = prompt("新しいニックネーム(英数・日のみ)", state.nickname);
     if(n && n !== state.nickname) {
-      if(!isValidNickname(n)) return alert("記号などは使用できません");
-      const old = state.nickname; state.nickname = n; document.getElementById('user-display').innerText = n;
+      const old = state.nickname; state.nickname = n; document.getElementById('user-badge').innerText = n;
       fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'update', oldNickname: old, nickname: n, countDelta: 0, lastIndex: state.currentIndex, bookmarks: state.bookmarks.join(',') }) });
       localStorage.setItem('zaimu_nick', n);
     }
