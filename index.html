@@ -9,25 +9,20 @@
     html, body { height: 100%; margin: 0; padding: 0; background: var(--bg); font-family: -apple-system, sans-serif; color: #333; }
     body { display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto; -webkit-user-select: none; user-select: none; }
     
-    /* スプラッシュ画面の修正 */
-    #splash-screen { position: fixed; inset: 0; background: #001a3d; z-index: 10000; display: flex; align-items: center; justify-content: center; }
-    #splash-img { width: 100%; height: 100%; object-fit: contain; }
-
-    /* タイトルサイズを元に戻す */
+    /* ヘッダー：タイトルサイズを継続日数(0.7rem)に合わせ太字に */
     .header { background: var(--primary); color: white; padding: calc(env(safe-area-inset-top) + 8px) 15px 10px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
-    .header h1 { font-size: 0.85rem; margin: 2px 0; font-weight: bold; }
-    .status-area { display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; margin-top: 3px; }
+    .header h1 { font-size: 0.7rem; margin: 0; font-weight: bold; }
+    .status-area { display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; margin-top: 4px; }
     .user-badge { background: var(--accent); padding: 2px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; }
 
     .main-content { flex: 1; padding-bottom: 30px; }
     .info-box { background: white; margin: 10px 15px; padding: 12px; border-radius: 12px; border-left: 4px solid var(--accent); box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
-    
     .guide-text { font-size: 0.7rem; color: #666; margin: 8px 18px 4px; font-weight: bold; }
     .guide-text b { color: var(--star); }
 
     .scene { width: 100%; height: 320px; display: flex; align-items: center; justify-content: center; perspective: 1000px; margin: 5px 0; }
     .card { width: 88%; height: 95%; position: relative; transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1); transform-style: preserve-3d; }
-    .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: flex-start; padding: 45px 20px; box-sizing: border-box; border-radius: 20px; font-weight: 600; font-size: 1.15rem; box-shadow: 0 8px 20px rgba(0,0,0,0.1); line-height: 1.6; overflow-y: auto; text-align: left; }
+    .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: flex-start; padding: 45px 20px; box-sizing: border-box; border-radius: 20px; font-weight: 600; font-size: 1.1rem; box-shadow: 0 8px 20px rgba(0,0,0,0.1); line-height: 1.6; overflow-y: auto; text-align: left; }
     .card-front { background: white; color: var(--primary); }
     .card-back { background: var(--accent); color: white; transform: rotateY(180deg); }
     .card-num { position: absolute; top: 15px; left: 20px; font-size: 0.7rem; font-family: monospace; opacity: 0.6; }
@@ -37,29 +32,34 @@
     .controls { display: flex; justify-content: space-between; gap: 10px; padding: 10px 15px; }
     .btn { background: #bdc3c7; color: white; border: none; padding: 12px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; flex: 1; cursor: pointer; }
     .btn-blue { background: var(--accent); }
-    .btn-dark { background: #34495e; } /* 先頭へボタン：色を濃く */
+    .btn-dark { background: #34495e; }
 
+    .screen { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; overflow-y: auto; }
+    input { width: 85%; padding: 14px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 1rem; outline: none; background: white; }
+    
     .ranking-area { background: white; margin: 15px; padding: 15px; border-radius: 15px; font-size: 0.8rem; }
     table { width: 100%; border-collapse: collapse; }
     th { color: #888; border-bottom: 1px solid #eee; padding: 8px; }
     td { padding: 10px 5px; border-bottom: 1px solid #f9f9f9; text-align: center; }
 
-    .yt-btn { background: var(--yt); color: white; margin: 20px 15px; padding: 15px; border-radius: 12px; text-decoration: none; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.95rem; gap: 8px; box-shadow: 0 4px 0 #b30000; }
-
-    .screen { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; overflow-y: auto; }
-    input { width: 85%; padding: 14px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 1rem; outline: none; background: white; }
+    .yt-btn { background: var(--yt); color: white; margin: 15px; padding: 15px; border-radius: 12px; text-decoration: none; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.95rem; gap: 8px; box-shadow: 0 4px 0 #b30000; }
     #modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 11000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
     .modal { background: white; width: 85%; max-width: 320px; border-radius: 20px; padding: 25px; text-align: center; }
+    .loading-spinner { border: 4px solid #f3f3f3; border-top: 4px solid var(--accent); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 20px auto; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     .hidden { display: none !important; }
   </style>
 </head>
 <body>
 
-<!-- スプラッシュ画面 -->
-<div id="splash-screen">
-  <img id="splash-img" src="" alt="">
+<!-- ロード中画面（スプラッシュの代わり） -->
+<div id="loader-screen" class="screen">
+  <h2 style="color: var(--primary)">財務２級ラボ</h2>
+  <div class="loading-spinner"></div>
+  <p style="font-size:0.8rem; color:#888">データを読み込み中...</p>
 </div>
 
+<!-- 認証画面 -->
 <div id="auth-screen" class="screen hidden">
   <h2 style="color: var(--primary); margin-bottom:20px;">財務２級ラボ</h2>
   <div id="login-form">
@@ -74,7 +74,7 @@
     <input type="text" id="reg-pw" placeholder="パスワード(半角英数)">
     <input type="text" id="reg-pw-confirm" placeholder="パスワード(確認用)">
     <input type="text" id="reg-secret" placeholder="秘密の合言葉(復旧用)">
-    <button id="reg-btn-action" class="btn btn-blue" style="width: 92%; margin-top:10px" onclick="register()">登録する</button>
+    <button class="btn btn-blue" style="width: 92%; margin-top:10px" onclick="register()">登録する</button>
     <p style="font-size:0.8rem; color:#888; margin-top:20px" onclick="showLogin()">戻る</p>
   </div>
   <div id="reset-form" class="hidden">
@@ -87,6 +87,7 @@
   </div>
 </div>
 
+<!-- アプリメイン画面 -->
 <div id="app-screen" class="hidden">
   <div class="header">
     <h1>財務２級ラボ　単語カード</h1>
@@ -104,7 +105,6 @@
     <div style="margin: 0 15px;"><select id="cat-select" onchange="changeCat()" style="width:100%; padding:12px; border-radius:10px; border:2px solid var(--accent); font-weight:bold; background:white; outline:none;"><option value="all">すべて表示</option><option value="review">復習対象 ⭐</option></select></div>
     
     <div class="guide-text">★マークをタップすると復習対象に登録できます。</div>
-    
     <div class="scene"><div class="card" id="card" onclick="handleTap()"><div class="card-face card-front"><div class="card-num" id="num-f">No.</div><div class="star" id="star-f" onclick="toggleStar(event)">★</div><div id="text-f" style="margin-top:10px"></div></div><div class="card-face card-back"><div class="card-num" id="num-b">No.</div><div class="star" id="star-b" onclick="toggleStar(event)">★</div><div id="text-b" style="margin-top:10px"></div></div></div></div>
     
     <div class="controls"><button class="btn" onclick="handleBack()">← 戻る</button><button class="btn btn-dark" onclick="resetToFirst()">先頭へ</button><label style="font-size:0.8rem; font-weight:bold; display:flex; align-items:center;"><input type="checkbox" id="rand-mode" style="margin-right:5px"> ランダム</label></div>
@@ -123,62 +123,37 @@
 
   let state = { nickname: '', all: [], filtered: [], quotes: [], bookmarks: [], currentIndex: 0, rotation: 0, isAns: false };
 
-  // 起動時の画像処理
   window.onload = () => {
-    const splashImg = document.getElementById('splash-img');
-    const isPortrait = window.innerHeight > window.innerWidth;
-    splashImg.src = isPortrait ? 'splash-v.png' : 'splash-h.png';
-    
-    // データ読込開始
     const savedNick = localStorage.getItem('zaimu_nick');
     const savedPw = localStorage.getItem('zaimu_pw');
     const url = `${API_URL}?action=init${savedNick ? '&nick='+encodeURIComponent(savedNick)+'&pw='+encodeURIComponent(savedPw) : ''}`;
     
     fetch(url).then(res => res.json()).then(data => {
-      state.all = data.problems;
-      state.quotes = data.quotes;
+      state.all = data.problems; state.quotes = data.quotes;
       const select = document.getElementById('cat-select');
       data.categories.forEach(c => {
         const opt = document.createElement('option'); opt.value = c; opt.innerText = c; select.appendChild(opt);
       });
-      if (data.youtubeUrl) {
-        const yt = document.getElementById('yt-link'); yt.href = data.youtubeUrl; yt.classList.remove('hidden');
-      }
+      if (data.youtubeUrl) { const yt = document.getElementById('yt-link'); yt.href = data.youtubeUrl; yt.classList.remove('hidden'); }
       renderRank(data.ranking);
-      updateCountdown();
-      showQuote();
+      updateCountdown(); showQuote();
 
+      document.getElementById('loader-screen').classList.add('hidden');
       if (data.user) {
-        const user = data.user;
-        state.nickname = user.nickname;
-        state.currentIndex = Number(user.lastIndex) || 0;
-        state.bookmarks = user.bookmarks ? user.bookmarks.toString().split(',').map(Number).filter(n=>n) : [];
-        document.getElementById('streak-display').innerText = `継続 ${user.streak}日 (最高継続日数 ${user.maxStreak}日)`;
+        state.nickname = data.user.nickname;
+        state.currentIndex = Number(data.user.lastIndex) || 0;
+        state.bookmarks = data.user.bookmarks ? data.user.bookmarks.toString().split(',').map(Number).filter(n=>n) : [];
+        document.getElementById('streak-display').innerText = `継続 ${data.user.streak}日 (最高継続日数 ${data.user.maxStreak}日)`;
         document.getElementById('user-display').innerText = state.nickname;
         changeCat();
-        setTimeout(finishSplash, 800); 
+        document.getElementById('app-screen').classList.remove('hidden');
       } else {
-        setTimeout(() => {
-          document.getElementById('splash-screen').style.opacity = '0';
-          setTimeout(() => {
-            document.getElementById('splash-screen').classList.add('hidden');
-            document.getElementById('auth-screen').classList.remove('hidden');
-          }, 300);
-        }, 1200);
+        document.getElementById('auth-screen').classList.remove('hidden');
       }
     }).catch(e => {
-        document.getElementById('splash-screen').classList.add('hidden');
-        document.getElementById('auth-screen').classList.remove('hidden');
+        document.getElementById('loader-screen').innerHTML = "<p>通信エラーが発生しました。再読み込みしてください。</p>";
     });
   };
-
-  function finishSplash() {
-    document.getElementById('splash-screen').style.opacity = '0';
-    setTimeout(() => {
-      document.getElementById('splash-screen').classList.add('hidden');
-      document.getElementById('app-screen').classList.remove('hidden');
-    }, 300);
-  }
 
   async function login() {
     const nick = document.getElementById('login-nick').value.trim();
@@ -204,13 +179,12 @@
     const nick = document.getElementById('reg-nick').value.trim(), pw = document.getElementById('reg-pw').value.trim(), pwC = document.getElementById('reg-pw-confirm').value.trim(), sec = document.getElementById('reg-secret').value.trim();
     if (!nick || !pw || !sec) return openModal("エラー", "全項目入力してください");
     if (pw !== pwC) return openModal("不一致", "パスワードが確認用と一致しません");
-    const btn = document.getElementById('reg-btn-action'); btn.innerText = "登録中..."; btn.disabled = true;
     try {
       const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'register', nickname: nick, pw: pw, secret: sec }) });
       const json = await res.json();
-      if (json.result === 'exists') { openModal("不可", "既に使われています"); btn.innerText = "登録する"; btn.disabled = false; }
-      else { openModal("完了", "登録しました"); showLogin(); }
-    } catch(e) { btn.innerText = "登録する"; btn.disabled = false; }
+      if (json.result === 'exists') return openModal("不可", "既に使われています");
+      else { openModal("完了", "登録しました。ログインしてください"); showLogin(); }
+    } catch(e) { }
   }
 
   async function resetPw() {
@@ -264,4 +238,26 @@
   }
 
   function toggleStar(e) { e.stopPropagation(); const id = state.filtered[state.currentIndex].id; const i = state.bookmarks.indexOf(id); if (i > -1) state.bookmarks.splice(i, 1); else state.bookmarks.push(id); updateCard(); sync(0); }
-  function handleBack() { if (state.filtered.length === 0) return; if (state.isAns) { state.isAns = false; state.rotation -= 180; } else { state.isAns = true; state.rotation -= 180; state.currentIndex = (state.currentIndex - 1 + state.filtered.length) % state.filtered.length; } updateCard(); document.getElementById('card').style.transform = `r
+  function handleBack() { if (state.filtered.length === 0) return; if (state.isAns) { state.isAns = false; state.rotation -= 180; } else { state.isAns = true; state.rotation -= 180; state.currentIndex = (state.currentIndex - 1 + state.filtered.length) % state.filtered.length; } updateCard(); document.getElementById('card').style.transform = `rotateY(${state.rotation}deg)`; }
+  function resetToFirst() { state.currentIndex = 0; state.isAns = false; state.rotation = 0; document.getElementById('card').style.transform = `rotateY(0deg)`; updateCard(); sync(0); }
+  function updateCountdown() { const diff = Math.ceil((new Date('2026/12/06') - new Date().setHours(0,0,0,0)) / 86400000); document.getElementById('countdown').innerText = diff > 0 ? `試験まで ${diff}日` : "試験当日"; }
+  function showQuote() { if(state.quotes.length > 0) document.getElementById('quote-display').innerText = state.quotes[Math.floor(Math.random() * state.quotes.length)]; }
+  function showReg() { document.getElementById('login-form').classList.add('hidden'); document.getElementById('reg-form').classList.remove('hidden'); }
+  function showLogin() { document.getElementById('reg-form').classList.add('hidden'); document.getElementById('reset-form').classList.add('hidden'); document.getElementById('login-form').classList.remove('hidden'); }
+  function showReset() { document.getElementById('login-form').classList.add('hidden'); document.getElementById('reset-form').classList.remove('hidden'); }
+  function logout() { localStorage.clear(); location.reload(); }
+  function openModal(t, m) { document.getElementById('modal-title').innerText = t; document.getElementById('modal-msg').innerText = m; document.getElementById('modal-overlay').classList.remove('hidden'); }
+  function closeModal() { document.getElementById('modal-overlay').classList.add('hidden'); }
+  function renderRank(data) { document.getElementById('rank-table').innerHTML = '<tr><th>位</th><th>名前</th><th>回数</th><th>継続</th></tr>' + data.map((r, i) => `<tr ${r.name === state.nickname ? 'style="background:#fff9c4;font-weight:bold;"':''}><td>${i+1}</td><td>${r.name}</td><td>${r.count}</td><td>${r.streak}日</td></tr>`).join(''); }
+
+  async function promptNick() {
+    const n = prompt("新しいニックネーム(英数・日のみ)", state.nickname);
+    if(n && n !== state.nickname) {
+      const old = state.nickname; state.nickname = n; document.getElementById('user-badge').innerText = n;
+      fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'update', oldNickname: old, nickname: n, countDelta: 0, lastIndex: state.currentIndex, bookmarks: state.bookmarks.join(',') }) });
+      localStorage.setItem('zaimu_nick', n);
+    }
+  }
+</script>
+</body>
+</html>
