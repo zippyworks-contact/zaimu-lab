@@ -8,21 +8,13 @@
     :root { --primary: #001a3d; --accent: #3498db; --bg: #f2f5f8; --star: #f1c40f; --yt: #ff0000; }
     html, body { height: 100%; margin: 0; padding: 0; background: var(--bg); font-family: -apple-system, sans-serif; color: #333; }
     body { display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto; -webkit-user-select: none; user-select: none; }
-    
-    /* スプラッシュ画像設定修正 */
-    #splash-screen { position: fixed; inset: 0; background: #001a3d; z-index: 9999; display: flex; align-items: center; justify-content: center; transition: opacity 0.4s; }
-    #splash-img { width: 100%; height: 100%; object-fit: contain; background: #001a3d; display: none; }
-
+    #splash-screen { position: fixed; inset: 0; background: #001a3d; z-index: 9999; display: flex; align-items: center; justify-content: center; transition: opacity 0.3s; }
+    #splash-img { width: 100%; height: 100%; object-fit: contain; background: #001a3d; }
     .header { background: var(--primary); color: white; padding: calc(env(safe-area-inset-top) + 10px) 15px 12px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
-    .header h1 { font-size: 0.85rem; margin: 5px 0; }
     .status-area { display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; margin-top: 5px; }
     .user-badge { background: var(--accent); padding: 2px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; }
-
-    .main-content { flex: 1; padding-bottom: 40px; }
     .info-box { background: white; margin: 10px 15px; padding: 12px; border-radius: 12px; border-left: 4px solid var(--accent); box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
     .guide-text { font-size: 0.7rem; color: #666; margin: 8px 18px 4px; font-weight: bold; }
-    .guide-text b { color: var(--star); }
-
     .scene { width: 100%; height: 320px; display: flex; align-items: center; justify-content: center; perspective: 1000px; margin: 5px 0; }
     .card { width: 88%; height: 95%; position: relative; transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1); transform-style: preserve-3d; }
     .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: flex-start; padding: 45px 20px; box-sizing: border-box; border-radius: 20px; font-weight: 600; font-size: 1.15rem; box-shadow: 0 8px 20px rgba(0,0,0,0.1); line-height: 1.6; overflow-y: auto; text-align: left; }
@@ -31,21 +23,17 @@
     .card-num { position: absolute; top: 15px; left: 20px; font-size: 0.7rem; font-family: monospace; opacity: 0.6; }
     .star { position: absolute; top: 10px; right: 15px; font-size: 1.8rem; color: #ccc; z-index: 20; }
     .star.active { color: var(--star); }
-
     .controls { display: flex; justify-content: space-between; gap: 10px; padding: 10px 15px; }
     .btn { background: #bdc3c7; color: white; border: none; padding: 12px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; flex: 1; cursor: pointer; }
     .btn-blue { background: var(--accent); }
-    .btn-dark { background: #555; }
-
+    .btn-dark { background: #34495e; }
+    .screen { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
+    input { width: 85%; padding: 14px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 1rem; outline: none; background: white; }
     .ranking-area { background: white; margin: 15px; padding: 15px; border-radius: 15px; font-size: 0.8rem; }
     table { width: 100%; border-collapse: collapse; }
     th { color: #888; border-bottom: 1px solid #eee; padding: 8px; }
     td { padding: 10px 5px; border-bottom: 1px solid #f9f9f9; text-align: center; }
-
     .yt-btn { background: var(--yt); color: white; margin: 15px; padding: 15px; border-radius: 12px; text-decoration: none; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.95rem; gap: 8px; box-shadow: 0 4px 0 #b30000; }
-
-    .screen { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; overflow-y: auto; }
-    input { width: 85%; padding: 14px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 1rem; outline: none; background: white; }
     #modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 3000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
     .modal { background: white; width: 85%; max-width: 320px; border-radius: 20px; padding: 25px; text-align: center; }
     .hidden { display: none !important; }
@@ -53,16 +41,14 @@
 </head>
 <body>
 
-<div id="splash-screen">
-  <img id="splash-img" src="" alt="">
-</div>
+<div id="splash-screen"><img id="splash-img" src="" alt=""></div>
 
 <div id="auth-screen" class="screen hidden">
   <h2 style="color: var(--primary); margin-bottom:20px;">財務２級ラボ</h2>
   <div id="login-form">
     <input type="text" id="login-nick" placeholder="ニックネーム">
     <input type="text" id="login-pw" placeholder="パスワード">
-    <button id="login-btn-action" class="btn btn-blue" style="max-width: 92%; margin-top:10px" onclick="login()">ログイン</button>
+    <button id="login-btn-action" class="btn btn-blue" style="width: 92%; margin-top:10px" onclick="login()">ログイン</button>
     <p style="font-size:0.8rem; color:var(--accent); margin-top:25px" onclick="showReg()">新規アカウント作成</p>
     <p style="font-size:0.75rem; color:#888" onclick="showReset()">パスワードを忘れた場合</p>
   </div>
@@ -71,14 +57,14 @@
     <input type="text" id="reg-pw" placeholder="パスワード(半角英数)">
     <input type="text" id="reg-pw-confirm" placeholder="パスワード(確認用)">
     <input type="text" id="reg-secret" placeholder="秘密の合言葉(復旧用)">
-    <button id="reg-btn-action" class="btn btn-blue" style="max-width: 92%; margin-top:10px" onclick="register()">登録する</button>
+    <button id="reg-btn-action" class="btn btn-blue" style="width: 92%; margin-top:10px" onclick="register()">登録する</button>
     <p style="font-size:0.8rem; color:#888; margin-top:20px" onclick="showLogin()">戻る</p>
   </div>
   <div id="reset-form" class="hidden">
     <input type="text" id="reset-nick" placeholder="登録ニックネーム">
     <input type="text" id="reset-secret" placeholder="秘密の合言葉">
-    <input type="text" id="reset-newpw" placeholder="新パスワード">
-    <input type="text" id="reset-newpw-confirm" placeholder="パスワード確認">
+    <input type="text" id="reset-newpw" placeholder="新PW">
+    <input type="text" id="reset-newpw-confirm" placeholder="新PW(確認)">
     <button class="btn btn-blue" style="width: 92%; margin-top:10px" onclick="resetPw()">再設定</button>
     <p style="font-size:0.8rem; color:#888; margin-top:20px" onclick="showLogin()">戻る</p>
   </div>
@@ -93,7 +79,6 @@
       <div class="user-badge" id="user-display" onclick="promptNick()"></div>
     </div>
   </div>
-
   <div class="main-content">
     <div class="info-box"><small style="color:var(--accent); font-weight:bold">今日のあなたへの言葉</small><div id="quote-display" style="font-weight:bold; margin-top:5px; font-size:0.85rem">...</div></div>
     <div class="guide-text">▼ 問題の種類を選択できます</div>
@@ -109,83 +94,85 @@
 <div id="modal-overlay" class="hidden"><div class="modal"><h3 id="modal-title"></h3><p id="modal-msg" style="margin-bottom:20px; font-size:0.85rem; line-height:1.5; color:#555"></p><button class="btn btn-blue" style="width:100%" onclick="closeModal()">OK</button></div></div>
 
 <script>
-  // 【重要】最新のGAS URL
-  const API_URL = "https://script.google.com/macros/s/AKfycbxhZqlJGuGtiM4FMGP15Oo319T-iFRJqmXiflU6rG2Q-z3o1_NMDIlA6FkvO3vxSixguw/exec";
+  // 【重要】最新のGAS URLをここに
+  const API_URL = "https://script.google.com/macros/s/AKfycbxUoKE4zH3SRp0LN-mE6DjdHhSQ5ajRFLJkIAOa4QHz34p7Lg0r2Dv57WU59ii3GO-4KA/exec";
 
   let state = { nickname: '', all: [], filtered: [], quotes: [], bookmarks: [], currentIndex: 0, rotation: 0, isAns: false };
 
   window.onload = () => {
     const img = document.getElementById('splash-img');
-    const splashPath = (window.innerHeight > window.innerWidth) ? 'splash-v.png' : 'splash-h.png';
-    img.src = splashPath;
-    img.onload = () => img.style.display = 'block'; // 読み込み完了後に表示
-    loadAppDataBackground();
-    setTimeout(hideSplash, 1200); // 遷移を早める
-  };
-
-  let appDataPromise = null;
-  function loadAppDataBackground() {
-    appDataPromise = fetch(API_URL + "?action=getAppData").then(res => res.json()).catch(e => null);
-  }
-
-  async function hideSplash() {
-    const splash = document.getElementById('splash-screen');
-    splash.style.opacity = '0';
-    setTimeout(() => {
-      splash.classList.add('hidden');
-      const saved = localStorage.getItem('zaimu_nick');
-      if (saved) { state.nickname = saved; loadMain(); }
-      else { document.getElementById('auth-screen').classList.remove('hidden'); }
-    }, 300);
-  }
-
-  async function loadMain() {
-    try {
-      const data = await appDataPromise;
-      if (!data) throw new Error();
-      state.all = data.problems; state.quotes = data.quotes;
+    img.src = (window.innerHeight > window.innerWidth) ? 'splash-v.png' : 'splash-h.png';
+    img.onload = () => img.style.display = 'block';
+    
+    // セッションがあれば即認証＋データ取得を開始
+    const savedNick = localStorage.getItem('zaimu_nick');
+    const savedPw = localStorage.getItem('zaimu_pw');
+    
+    const url = `${API_URL}?action=init${savedNick ? '&nick='+encodeURIComponent(savedNick)+'&pw='+encodeURIComponent(savedPw) : ''}`;
+    
+    fetch(url).then(res => res.json()).then(data => {
+      state.all = data.problems;
+      state.quotes = data.quotes;
+      
+      // カテゴリ追加
       const select = document.getElementById('cat-select');
-      while(select.options.length > 2) select.remove(2);
       data.categories.forEach(c => {
         const opt = document.createElement('option'); opt.value = c; opt.innerText = c; select.appendChild(opt);
       });
       if (data.youtubeUrl) {
         const yt = document.getElementById('yt-link'); yt.href = data.youtubeUrl; yt.classList.remove('hidden');
       }
-      const pw = localStorage.getItem('zaimu_pw');
-      const uRes = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'login', nickname: state.nickname, pw: pw }) });
-      const uJson = await uRes.json();
-      if (uJson.result === 'fail') { logout(); return; }
-      const user = JSON.parse(uJson.result);
-      state.currentIndex = Number(user.lastIndex) || 0;
-      state.bookmarks = user.bookmarks ? user.bookmarks.toString().split(',').map(Number).filter(n=>n) : [];
-      // 表記修正
-      document.getElementById('streak-display').innerText = `継続 ${user.streak}日 (最高継続日数 ${user.maxStreak}日)`;
-      document.getElementById('user-display').innerText = state.nickname;
       renderRank(data.ranking);
-      updateCountdown(); showQuote(); changeCat();
-      document.getElementById('auth-screen').classList.add('hidden');
+      updateCountdown();
+      showQuote();
+
+      // 自動ログイン判定
+      if (data.user) {
+        const user = data.user;
+        state.nickname = user.nickname;
+        state.currentIndex = Number(user.lastIndex) || 0;
+        state.bookmarks = user.bookmarks ? user.bookmarks.toString().split(',').map(Number).filter(n=>n) : [];
+        document.getElementById('streak-display').innerText = `継続 ${user.streak}日 (最高継続日数 ${user.maxStreak}日)`;
+        document.getElementById('user-display').innerText = state.nickname;
+        changeCat();
+        setTimeout(hideSplash, 500); // 準備完了
+      } else {
+        setTimeout(() => {
+          document.getElementById('splash-screen').style.opacity = '0';
+          setTimeout(() => {
+            document.getElementById('splash-screen').classList.add('hidden');
+            document.getElementById('auth-screen').classList.remove('hidden');
+          }, 300);
+        }, 800);
+      }
+    });
+  };
+
+  function hideSplash() {
+    document.getElementById('splash-screen').style.opacity = '0';
+    setTimeout(() => {
+      document.getElementById('splash-screen').classList.add('hidden');
       document.getElementById('app-screen').classList.remove('hidden');
-    } catch(e) { openModal("エラー", "接続に失敗しました。URLとネットを確認してください。"); }
+    }, 300);
   }
 
   async function login() {
     const nick = document.getElementById('login-nick').value.trim();
     const pw = document.getElementById('login-pw').value.trim();
-    if(!nick || !pw) return openModal("入力不足", "ニックネームとパスワードを入力してください");
+    if(!nick || !pw) return openModal("エラー", "ニックネームとパスワードを入力してください");
     const btn = document.getElementById('login-btn-action');
     btn.innerText = "認証中..."; btn.disabled = true;
+
     try {
-      const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'login', nickname: nick, pw: pw }) });
-      const json = await res.json();
-      if (json.result === 'fail') {
+      const res = await fetch(`${API_URL}?action=init&nick=${encodeURIComponent(nick)}&pw=${encodeURIComponent(pw)}`);
+      const data = await res.json();
+      if (!data.user) {
         openModal("失敗", "ニックネームまたはPWが違います");
         btn.innerText = "ログイン"; btn.disabled = false;
       } else {
         localStorage.setItem('zaimu_nick', nick);
         localStorage.setItem('zaimu_pw', pw);
-        state.nickname = nick;
-        loadMain();
+        location.reload(); // ロジック簡略化のためリロード
       }
     } catch(e) { openModal("エラー", "通信失敗"); btn.innerText = "ログイン"; btn.disabled = false; }
   }
@@ -193,7 +180,7 @@
   async function register() {
     const nick = document.getElementById('reg-nick').value.trim(), pw = document.getElementById('reg-pw').value.trim(), pwC = document.getElementById('reg-pw-confirm').value.trim(), sec = document.getElementById('reg-secret').value.trim();
     if (!nick || !pw || !sec) return openModal("エラー", "全項目入力してください");
-    if (pw !== pwC) return openModal("不一致", "パスワードが一致しません");
+    if (pw !== pwC) return openModal("不一致", "パスワードが確認用と一致しません");
     const btn = document.getElementById('reg-btn-action'); btn.innerText = "登録中..."; btn.disabled = true;
     try {
       const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'register', nickname: nick, pw: pw, secret: sec }) });
@@ -205,8 +192,10 @@
 
   function handleTap() {
     if (state.filtered.length === 0) return;
-    if (!state.isAns) { state.isAns = true; state.rotation += 180; updateCard(); sync(1); }
-    else {
+    if (!state.isAns) {
+      state.isAns = true; state.rotation += 180; updateCard();
+      sync(1); // ここでランキング更新が走る
+    } else {
       state.isAns = false; state.rotation += 180;
       if (document.getElementById('rand-mode').checked) state.currentIndex = Math.floor(Math.random() * state.filtered.length);
       else state.currentIndex = (state.currentIndex + 1) % state.filtered.length;
@@ -215,8 +204,10 @@
     document.getElementById('card').style.transform = `rotateY(${state.rotation}deg)`;
   }
 
-  function sync(delta) {
-    fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'update', oldNickname: state.nickname, nickname: state.nickname, countDelta: delta, lastIndex: state.currentIndex, bookmarks: state.bookmarks.join(',') }) });
+  async function sync(delta) {
+    const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'update', oldNickname: state.nickname, nickname: state.nickname, countDelta: delta, lastIndex: state.currentIndex, bookmarks: state.bookmarks.join(',') }) });
+    const json = await res.json();
+    if (json.ranking) renderRank(json.ranking); // 即座に反映
   }
 
   function changeCat() {
@@ -238,7 +229,6 @@
     document.getElementById(isFront ? 'text-f' : 'text-b').innerText = isFront ? p.q : p.a;
     const isB = state.bookmarks.includes(p.id);
     document.getElementById('star-f').classList.toggle('active', isB); document.getElementById('star-b').classList.toggle('active', isB);
-    localStorage.setItem('zaimu_lastIndex', state.currentIndex);
   }
 
   function toggleStar(e) { e.stopPropagation(); const id = state.filtered[state.currentIndex].id; const i = state.bookmarks.indexOf(id); if (i > -1) state.bookmarks.splice(i, 1); else state.bookmarks.push(id); updateCard(); sync(0); }
