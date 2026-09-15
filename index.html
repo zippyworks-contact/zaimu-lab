@@ -9,14 +9,14 @@
     html, body { height: 100%; margin: 0; padding: 0; background: var(--bg); font-family: -apple-system, sans-serif; color: #333; }
     body { display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto; -webkit-user-select: none; user-select: none; }
     
-    /* ヘッダーデザイン */
     .header { background: var(--primary); color: white; padding: calc(env(safe-area-inset-top) + 8px) 15px 10px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
-    .title-row { display: flex; align-items: center; gap: 10px; }
-    .header h1 { font-size: 0.7rem; margin: 0; font-weight: bold; white-space: nowrap; }
-    /* リアルタイムカウンター */
-    .realtime-counter { font-size: 0.7rem; background: rgba(255,255,255,0.15); padding: 1px 8px; border-radius: 4px; font-weight: bold; color: var(--star); }
     
-    .status-area { display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; margin-top: 5px; }
+    /* タイトル行と累計回答数のレイアウト修正 */
+    .title-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; }
+    .header h1 { font-size: 0.7rem; margin: 0; font-weight: bold; white-space: nowrap; }
+    .realtime-counter { font-size: 0.7rem; font-weight: bold; color: var(--star); background: rgba(255,255,255,0.1); padding: 1px 6px; border-radius: 4px; }
+    
+    .status-area { display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; margin-top: 6px; }
     .user-badge { background: var(--accent); padding: 2px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; }
 
     .main-content { flex: 1; padding-bottom: 30px; }
@@ -40,10 +40,12 @@
 
     .screen { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; overflow-y: auto; }
     input { width: 85%; padding: 14px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 1rem; outline: none; background: white; }
+    
     .ranking-area { background: white; margin: 15px; padding: 15px; border-radius: 15px; font-size: 0.8rem; }
     table { width: 100%; border-collapse: collapse; }
     th { color: #888; border-bottom: 1px solid #eee; padding: 8px; }
     td { padding: 10px 5px; border-bottom: 1px solid #f9f9f9; text-align: center; }
+
     .yt-btn { background: var(--yt); color: white; margin: 15px 15px; padding: 15px; border-radius: 12px; text-decoration: none; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.95rem; gap: 8px; box-shadow: 0 4px 0 #b30000; }
     #modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 11000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
     .modal { background: white; width: 85%; max-width: 320px; border-radius: 20px; padding: 25px; text-align: center; }
@@ -78,7 +80,7 @@
     <p style="font-size:0.8rem; color:#888; margin-top:20px" onclick="showLogin()">戻る</p>
   </div>
   <div id="reset-form" class="hidden">
-    <input type="text" id="reset-nick" placeholder="ニックネーム">
+    <input type="text" id="reset-nick" placeholder="登録ニックネーム">
     <input type="text" id="reset-secret" placeholder="秘密の合言葉">
     <input type="text" id="reset-newpw" placeholder="新PW">
     <input type="text" id="reset-newpw-confirm" placeholder="確認PW">
@@ -91,24 +93,29 @@
   <div class="header">
     <div class="title-row">
       <h1>財務２級ラボ　単語カード</h1>
-      <!-- 回数カウンター -->
-      <div class="realtime-counter"><span id="live-count">0</span>回</div>
+      <!-- 回数カウンター（文言変更） -->
+      <div class="realtime-counter">単語カードをめくった総数：<span id="live-count">0</span>回</div>
     </div>
     <div class="status-area">
       <div id="countdown"></div>
-      <div id="streak-display">継続 1日 (最高 1日)</div>
+      <div id="streak-display">継続 1日 (最高継続日数 1日)</div>
       <div class="user-badge" id="user-display" onclick="promptNick()"></div>
     </div>
   </div>
 
   <div class="main-content">
     <div class="info-box"><small style="color:var(--accent); font-weight:bold">今日のあなたへの言葉</small><div id="quote-display" style="font-weight:bold; margin-top:5px; font-size:0.85rem">...</div></div>
+    
     <div class="guide-text">▼ 問題の種類を選択できます</div>
     <div style="margin: 0 15px;"><select id="cat-select" onchange="changeCat()" style="width:100%; padding:12px; border-radius:10px; border:2px solid var(--accent); font-weight:bold; background:white; outline:none;"><option value="all">すべて表示</option><option value="review">復習対象 ⭐</option></select></div>
+    
     <div class="guide-text">★マークをタップすると復習対象に登録できます。</div>
     <div class="scene"><div class="card" id="card" onclick="handleTap()"><div class="card-face card-front"><div class="card-num" id="num-f">No.</div><div class="star" id="star-f" onclick="toggleStar(event)">★</div><div id="text-f" style="margin-top:10px"></div></div><div class="card-face card-back"><div class="card-num" id="num-b">No.</div><div class="star" id="star-b" onclick="toggleStar(event)">★</div><div id="text-b" style="margin-top:10px"></div></div></div></div>
+    
     <div class="controls"><button class="btn" onclick="handleBack()">← 戻る</button><button class="btn btn-dark" onclick="resetToFirst()">先頭へ</button><label style="font-size:0.8rem; font-weight:bold; display:flex; align-items:center;"><input type="checkbox" id="rand-mode" style="margin-right:5px"> ランダム</label></div>
+    
     <div class="ranking-area"><h3 style="margin:0 0 10px; font-size:0.85rem; color:var(--primary);">🏆 カードをめくったランキングTOP２０</h3><table id="rank-table"></table><button class="btn" style="margin-top:25px; width:100%; background:#eee; color:#666;" onclick="logout()">ログアウト</button></div>
+    
     <a id="yt-link" href="#" target="_blank" class="yt-btn hidden">📺 YouTube解説を見る</a>
   </div>
 </div>
@@ -116,8 +123,7 @@
 <div id="modal-overlay" class="hidden"><div class="modal"><h3 id="modal-title"></h3><p id="modal-msg" style="margin-bottom:20px; font-size:0.85rem; line-height:1.5; color:#555"></p><button class="btn btn-blue" style="width:100%" onclick="closeModal()">OK</button></div></div>
 
 <script>
-  // 【重要】API_URLを貼り付け
-  const API_URL = "https://script.google.com/macros/s/AKfycbwE-5TlIj5dHx1_zG5S9YFR1e5ti0xUSAFUCvbR9U4yZVvkIdAzIq9qe3tTagesmaDbzA/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycbz0XIRCaIwOifCOQeJZdGzknClUpayS38M8K0E8soGgWN__Dl2GJGj1aL-B4TQ29TQ6RQ/exec";
 
   let state = { nickname: '', count: 0, all: [], filtered: [], quotes: [], bookmarks: [], currentIndex: 0, rotation: 0, isAns: false };
 
@@ -158,9 +164,8 @@
     state.count = Number(user.count) || 0;
     state.currentIndex = Number(user.lastIndex) || 0;
     state.bookmarks = user.bookmarks ? user.bookmarks.toString().split(',').map(Number).filter(n=>n) : [];
-    
     document.getElementById('live-count').innerText = state.count;
-    document.getElementById('streak-display').innerText = `継続 ${user.streak}日 (最高 ${user.maxStreak}日)`;
+    document.getElementById('streak-display').innerText = `継続 ${user.streak}日 (最高継続日数 ${user.maxStreak}日)`;
     document.getElementById('user-display').innerText = state.nickname;
     changeCat();
   }
@@ -171,7 +176,6 @@
     if(!nick || !pw) return openModal("入力不足", "情報を入力してください");
     const btn = document.getElementById('login-btn-action');
     btn.innerText = "認証中..."; btn.disabled = true;
-
     try {
       const res = await fetch(`${API_URL}?action=init&nick=${encodeURIComponent(nick)}&pw=${encodeURIComponent(pw)}`);
       const data = await res.json();
@@ -192,7 +196,7 @@
     if (state.filtered.length === 0) return;
     if (!state.isAns) {
       state.isAns = true; state.rotation += 180; 
-      state.count++; // 即座にカウントアップ
+      state.count++;
       document.getElementById('live-count').innerText = state.count;
       updateCard(); sync(1); 
     } else {
@@ -210,7 +214,6 @@
     if (json.ranking) renderRank(json.ranking);
   }
 
-  // --- 以降、補助関数 ---
   function changeCat() {
     const val = document.getElementById('cat-select').value;
     if (val === 'all') state.filtered = state.all;
@@ -220,6 +223,7 @@
     document.getElementById('card').style.transform = `rotateY(0deg)`;
     updateCard();
   }
+
   function updateCard() {
     if (state.filtered.length === 0) { document.getElementById('text-f').innerText = "問題がありません"; document.getElementById('text-b').innerText = ""; return; }
     const p = state.filtered[state.currentIndex];
@@ -230,6 +234,7 @@
     const isB = state.bookmarks.includes(p.id);
     document.getElementById('star-f').classList.toggle('active', isB); document.getElementById('star-b').classList.toggle('active', isB);
   }
+
   function toggleStar(e) { e.stopPropagation(); const id = state.filtered[state.currentIndex].id; const i = state.bookmarks.indexOf(id); if (i > -1) state.bookmarks.splice(i, 1); else state.bookmarks.push(id); updateCard(); sync(0); }
   function handleBack() { if (state.filtered.length === 0) return; if (state.isAns) { state.isAns = false; state.rotation -= 180; } else { state.isAns = true; state.rotation -= 180; state.currentIndex = (state.currentIndex - 1 + state.filtered.length) % state.filtered.length; } updateCard(); document.getElementById('card').style.transform = `rotateY(${state.rotation}deg)`; }
   function resetToFirst() { state.currentIndex = 0; state.isAns = false; state.rotation = 0; document.getElementById('card').style.transform = `rotateY(0deg)`; updateCard(); sync(0); }
